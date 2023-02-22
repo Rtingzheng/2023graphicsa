@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1677037143 source:c:\users\administrator\desktop\week02-3_circle_cos_sin\main.cpp
+	<GL/glut.h>
+	<math.h>
+
