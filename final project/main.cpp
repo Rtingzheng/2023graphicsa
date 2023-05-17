@@ -7,7 +7,7 @@ GLMmodel * body = NULL;
 GLMmodel * uparmR = NULL;
 GLMmodel * lowarmR = NULL; ///step02-2 要讀檔用的指標, 一開始也是 NULL
 int show[4]={1,1,1,1};
-int ID=0;///0:頭 1:身體 2:上手臂 3:下手臂
+int ID=2;///0:頭 1:身體 2:上手臂 3:下手臂
 void keyboard(unsigned char key,int x,int y){
     if(key=='0') ID = 0;
     if(key=='1') ID = 1;
@@ -43,19 +43,28 @@ void display()
         else glColor3f(1,1,1);///沒選定設白色
         if(show[1]) glmDraw(body, GLM_MATERIAL);
         glPushMatrix();
+            glTranslatef(-1.200000, +0.460000, 0);
+            glRotatef(angle,0,0,1);
+            glTranslatef(1.200000, -0.460000, 0);
 
-        glTranslatef(teapotX,teapotY,0);
-        if(ID==2) glColor3f(1,0,0);///選定設紅色
-        else glColor3f(1,1,1);///沒選定設白色
-        if(show[2]) glmDraw(uparmR, GLM_MATERIAL);
-        glPopMatrix();
+            if(ID==2) glColor3f(1,0,0);///選定設紅色
+            else glColor3f(1,1,1);///沒選定設白色
+            if(show[2]) glmDraw(uparmR, GLM_MATERIAL);
 
-        if(ID==3) glColor3f(1,0,0);///選定設紅色
-        else glColor3f(1,1,1);///沒選定設白色
-        if(show[3]) glmDraw(lowarmR, GLM_MATERIAL);
+            glPushMatrix();
+                glTranslatef(-1.933332, 0.093333, 0);
+                glRotatef(angle,0,0,1);
+                glTranslatef(1.933332, -0.093333, 0);
+                if(ID==3) glColor3f(1,0,0);///選定設紅色
+                else glColor3f(1,1,1);///沒選定設白色
+                if(show[3]) glmDraw(lowarmR, GLM_MATERIAL);
+            glPopMatrix();
         glPopMatrix();
-        glutSwapBuffers();
-        ///glTranslatef(teapotX, teapotY, 0);
+    glPopMatrix();
+    glColor3f(0,1,0);
+    glutSolidTeapot(0.02);
+    glutSwapBuffers();
+    ///glTranslatef(teapotX, teapotY, 0);
         ///glTranslatef(????); ///step03-2 擺動作
         ///glRotatef(angle, 0, 0, 1);///step03-2 擺動作
         ///glTranslatef(0.400000, -0.060000, 0);///step03-2
@@ -66,6 +75,9 @@ int oldX=0,oldY=0;
 void motion(int x,int y){
     teapotX+=(x-oldX)/150.0;
     teapotY-=(y-oldY)/150.0;
+    oldX=x;
+    oldY=y;
+    angle=x;
     printf("glTranslatef(%f, %f, 0);\n", teapotX, teapotY);
     glutPostRedisplay();
 }
@@ -99,6 +111,7 @@ int main(int argc, char** argv)
 
     glutDisplayFunc(display);
     glutMouseFunc(mouse);
+    glutMotionFunc(motion);
     glutKeyboardFunc(keyboard); ///step02-2 keyboard要做事囉(開檔、讀檔)
 
     glutMainLoop();
